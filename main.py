@@ -1,11 +1,35 @@
 import pandas as pd
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.neighbors import NearestNeighbors
+import joblib
+import os
+import datetime as date
+
+def model_training():
+    # Step 1: Load cleaned dataset
+    df = pd.read_csv("cleaned_exercise_dataset.csv")
+
+    # Step 2: Select features for ML
+    features = ["muscle_group", "equipment", "difficulty", "goal_type", "training_type", "experience_level", "reps", "sets"]
+
+    # Step 3: Scale numerical features
+    scaler = StandardScaler()
+    X = scaler.fit_transform(df[features])
+
+    # Step 4: Train KNN model
+    knn_model = NearestNeighbors(n_neighbors=5, metric='euclidean')
+    knn_model.fit(X)
+
+    # Save the model and scaler
+    joblib.dump(knn_model, "workout_knn_model.pkl")
+    joblib.dump(scaler, "scaler.pkl")
+
+    print("KNN workout recommendation model trained and saved.")
 
 def get_user_data():
     print("Please enter your details:")
     try:
         print("Note: Age should be a number, Weight in kg, Height in cm.")
-        print("Make sure to provide your preferences clearly.")
         name = input("Name: ")
         age = int(input("Age: "))
         weight = float(input("Weight (kg): "))
@@ -17,7 +41,8 @@ def get_user_data():
         valid_goals = ["Strength", "Hypertrophy", "Cardio", "Endurance"]
         if goal not in valid_goals:
             raise ValueError(f"Goal must be one of {valid_goals}.")
-        pref = input("Preferences (Home or Gym, available equipment): ")
+        training_type = input("Training Type (e.g., strength, cardio, flexibility): ").capitalize()
+        muscle_group = input("Preferred Muscle Group (e.g., legs, arms, back, chest): ").capitalize()
         print("Thank you for providing your details!")
         
     except KeyboardInterrupt:
@@ -41,7 +66,8 @@ def get_user_data():
         "weight": weight,
         "height": height,
         "goal": goal,
-        "preferences": pref,
+        "training_type": training_type,
+        "muscle_group": muscle_group,
         "experience_level": experience_level,
     }
     
@@ -92,6 +118,41 @@ def data_cleaning():
 
     print("Dataset cleaned and saved as 'cleaned_exercise_dataset.csv'")
     
+def recommend_workouts_ml(user_input):
+    # Load data, model, and scaler
+    df = pd.read_csv("cleaned_exercise_dataset.csv")
+    knn_model = joblib.load("workout_knn_model.pkl")
+    scaler = joblib.load("scaler.pkl")
+    
+    # Encode and prepare user input
+    le_dict = {
+        "muscle_group": LabelEncoder().fit(df["muscle_group"]),
+        "equipment": LabelEncoder().fit(df["equipment"]),
+        "difficulty": LabelEncoder().fit(df["experience_level"]),
+        "goal_type": LabelEncoder().fit(df["goal_type"]),
+        "training_type": LabelEncoder().fit(df["training_type"]),
+        "experience_level": LabelEncoder().fit(df["experience_level"]),
+    }
+    
+    # Encode input
+    user_vector = [
+        le_dict["muscle_group"].transform([user_input["muscle_group"]])[0],
+        le_dict["equipment"].transform([user_input["equipment"]])[0],
+        le_dict["difficulty"].transform([user_input["difficulty"]])[0],
+        le_dict["goal_type"].transform([user_input["goal"]])[0],
+        le_dict["training_type"].transform([user_input["training_type"]])[0],
+        le_dict["experience_level"].transform([user_input["experience_level"]])[0],
+        user_input["reps"],
+        user_input["sets"],
+    ]
+
+    # Scale
+    user_vector_scaled = scaler.transform([user_vector])
+
+    # Get recommendations
+    indices = knn_model.kneighbors(user_vector_scaled, return_distance=False)[0]
+    return df.iloc[indices][["exercise_name", "reps", "sets", "difficulty", "muscle_group"]].to_dict(orient="records")    
+    
 def workout_recommendation(user_data):
     # Load cleaned dataset
     df = pd.read_csv("cleaned_exercise_dataset.csv")
@@ -125,6 +186,49 @@ def workout_recommendation(user_data):
     # Return top 5 recommendations
     return filtered_df.sample(min(5, len(filtered_df))).to_dict(orient="records")
      
+def log_workout(user_id, workout_data, log_file="user_workout_history.csv"):
+    """
+    Append a user's workout session to a CSV history log.
+    workout_data should be a list of dicts with keys: exercise_name, sets, reps, notes (optional)
+    """
+    today = str(date.today())
+    records = []
+    for item in workout_data:
+        records.append({
+            "user_id": user_id,
+            "date": today,
+            "exercise_name": item["exercise_name"],
+            "sets": item["sets"],
+            "reps": item["reps"],
+            "notes": item.get("notes", "")
+        })
+    
+    df_new = pd.DataFrame(records)
+
+    # Append or create file
+    if os.path.exists(log_file):
+        df_existing = pd.read_csv(log_file)
+        df_combined = pd.concat([df_existing, df_new], ignore_index=True)
+    else:
+        df_combined = df_new
+
+    df_combined.to_csv(log_file, index=False)
+    print(f"Workout logged for {user_id} on {today}")     
+     
+def get_user_progress(user_id, log_file="user_workout_history.csv"):
+    if not os.path.exists(log_file):
+        return f"No workout history found for {user_id}."
+
+    df = pd.read_csv(log_file)
+    user_df = df[df["user_id"] == user_id]
+
+    if user_df.empty:
+        return f"No data for {user_id}."
+
+    # Group by exercise, show total sets/reps over time
+    summary = user_df.groupby(["exercise_name", "date"])[["sets", "reps"]].sum().reset_index()
+    return summary     
+
 if __name__ == "__main__":
     print("Welcome to PersonaFit!")
     print("This is a simple program to help you with personalized plans for your fitness goals.")
@@ -132,5 +236,11 @@ if __name__ == "__main__":
     print(f"Hello {user_data['name']}, based on your details, we will create a personalized plan for you.")
     print("User Data:", user_data)
     data_cleaning()
-    workout_recommendation(user_data)
+    model_training()
+    recommend_workouts_ml(user_data)
+    log_workout(user_data['name'], recommend_workouts_ml(user_data))
+    print("Workout logged successfully.")
+    get_user_progress(user_data['name'])
+    print("User progress retrieved successfully.")
+    print("Thank you for using PersonaFit! Have a great day!")
     
