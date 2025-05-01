@@ -1,78 +1,122 @@
+import streamlit as st
 import pandas as pd
 
-def get_user_data():
-    print("Please enter your details:")
-    try:
-        print("Note: Age should be a number, Weight in kg, Height in cm.")
-        name = input("Name: ")
-        age = int(input("Age: "))
-        if age < 0 or age > 100:
-            print("Age must be between 0 and 100.")
-            return None
-        weight = float(input("Weight (kg): "))
-        if weight < 0 or weight > 300:
-            print("Weight must be between 0 and 300 kg.")
-            return None
-        height = float(input("Height (cm): "))
-        if height < 0 or height > 300:
-            print("Height must be between 0 and 300 cm.")
-            return None
-
-        valid_muscles = ['waist', 'upper legs', 'lower legs', 'chest',
-                         'back', 'upper arms', 'cardio', 'shoulders', 'lower arms']
-        print(f"Available muscle groups: {', '.join(valid_muscles)}")
-        muscle = input("What muscle do you want to hit today? : ").lower()
-        if muscle not in valid_muscles:
-            raise ValueError(f"Please choose from these muscles: {', '.join(valid_muscles)}")
-
-        print("Thank you for providing your details!")
-
-    except KeyboardInterrupt:
-        print("\nInput interrupted. Exiting...")
-        return None
-    except ValueError as e:
-        print(f"Invalid input: {e}")
-        return None
-    except Exception as e:
-        print(f"An unexpected error occurred: {e}")
-        return None
-
-    return {
-        "name": name,
-        "age": age,
-        "weight": weight,
-        "height": height,
-        "muscle": muscle,
-    }
+# Load exercise data
+@st.cache_data
+def load_data():
+  try:
+    df = pd.read_csv('fitness_exercises.csv')
+    return df
+  except:
+    st.error("❌ Exercise database not found. Please ensure 'fitness_exercises.csv' is in the correct directory.")
+    return None
 
 
-def get_workout_plan(muscle):
-    try:
-        db = pd.read_csv('exercises.csv')
-        exercises = db[db['bodyPart'] == muscle][['name', 'instructions/0']]
+# Main app
+def main():
+  st.set_page_config(page_title="PersonaFit", page_icon="💪", layout="wide")
 
-        if exercises.empty:
-            print(f"No exercises found for {muscle}.")
-            return
+  st.title("💪 PersonaFit - Your Personal Fitness Assistant")
+  st.markdown("### Get customized workout plans based on your body metrics")
 
-        print(f"\nYour workout plan for {muscle}:")
-        for idx, row in exercises.iterrows():
-            print(f"\nExercise: {row['name']}")
-            print(f"Instructions: {row['instructions/0']}")
+  # Sidebar for user input
+  with st.sidebar:
+    st.header("Your Details")
+    name = st.text_input("Name*", help="Required field")
+    age = st.number_input("Age", min_value=10, max_value=100, value=25)
+    weight = st.number_input("Weight (kg)", min_value=30, max_value=300, value=70)
+    height = st.number_input("Height (cm)", min_value=100, max_value=250, value=175)
 
-    except FileNotFoundError:
-        print("Error: exercises.csv file not found.")
-    except Exception as e:
-        print(f"An error occurred while generating workout plan: {e}")
+    muscle_options = ['waist', 'upper legs', 'lower legs', 'chest',
+                      'back', 'upper arms', 'cardio', 'shoulders', 'lower arms']
+    target_muscle = st.selectbox("Target Muscle Group*", muscle_options)
+
+    if st.button("Generate Workout Plan", type="primary"):
+      if not name:
+        st.warning("⚠️ Please enter your name")
+      else:
+        user_data = {
+          "name": name,
+          "age": age,
+          "weight": weight,
+          "height": height,
+          "muscle": target_muscle
+        }
+        st.session_state.user_data = user_data
+        st.session_state.show_plan = True
+
+  # Main content area
+  if 'show_plan' not in st.session_state:
+    st.session_state.show_plan = False
+
+  if st.session_state.show_plan:
+    user_data = st.session_state.user_data
+    df = load_data()
+
+    if df is not None:
+      st.header(f"🏋️‍♂️ {user_data['name']}'s Personalized Workout Plan")
+      st.subheader(
+        f"Target: {user_data['muscle'].title()} | Age: {user_data['age']} | Weight: {user_data['weight']}kg | Height: {user_data['height']}cm")
+
+      # Filter exercises
+      filtered_exercises = df[df['bodyPart'].str.lower() == user_data['muscle']]
+
+      if filtered_exercises.empty:
+        st.warning(f"❌ No exercises found for {user_data['muscle']}.")
+      else:
+        st.success(f"✅ Found {len(filtered_exercises)} exercises for you!")
+
+        for i, exercise in filtered_exercises.iterrows():
+          with st.expander(f"**{i + 1}. {exercise['name'].title()}** ({exercise['equipment'].title()})",
+                           expanded=False):
+            col1, col2 = st.columns([1, 2])
+
+            with col1:
+              # Display exercise GIF with error handling
+              try:
+                gif_url = exercise['gifUrl']
+                if pd.notna(gif_url) and gif_url.startswith('http'):
+                  st.markdown(f"**Exercise Demo:**")
+                  st.markdown(f'<img src="{gif_url}" width="100%">', unsafe_allow_html=True)
+                else:
+                  st.warning("GIF not available")
+              except Exception as e:
+                st.error(f"Couldn't load GIF: {str(e)}")
+
+            with col2:
+              st.markdown(f"**Equipment:** {exercise['equipment'].title()}")
+              st.markdown("**Instructions:**")
+
+              # Handle instructions/0 column
+              if 'instructions/0' in exercise:
+                instructions = exercise['instructions/0']
+              elif 'instructions' in exercise:
+                instructions = exercise['instructions']
+              else:
+                instructions = "No instructions available"
+
+              st.write(instructions)
+
+              # YouTube search link
+              youtube_search = f"https://www.youtube.com/results?search_query={exercise['name'].replace(' ', '+')}+exercise"
+              st.markdown(f"[📺 Watch YouTube Tutorials]({youtube_search})", unsafe_allow_html=True)
+
+        # Download button
+        csv = filtered_exercises[['name', 'equipment', 'bodyPart']].to_csv(index=False)
+        st.download_button(
+          label="📥 Download Workout Plan",
+          data=csv,
+          file_name=f"{user_data['name']}_{user_data['muscle']}_workout.csv",
+          mime="text/csv"
+        )
+
+  # About section
+  st.sidebar.markdown("---")
+  st.sidebar.markdown("""
+    **About PersonaFit**  
+    Uses the [Fitness Exercises Dataset](https://www.kaggle.com/datasets/omarxadel/fitness-exercises-dataset)
+    """)
 
 
 if __name__ == "__main__":
-    print("Welcome to PersonaFit!")
-    print("This is a simple program to help you with personalized plans for your fitness goals.")
-
-    user_data = get_user_data()
-    if user_data:
-        print(f"\nHello {user_data['name']}, based on your details, we will create a personalized plan for you.")
-        get_workout_plan(user_data['muscle'])
-
-    print("\nThank you for using PersonaFit! Have a great day!")
+  main()
