@@ -85,6 +85,12 @@ def data_cleaning():
 
     print("Dataset cleaned and saved as 'cleaned_exercise_dataset.csv'")
     
+def workout_recommendation(user_data):
+    df = pd.read_csv("cleaned_exercise_dataset.csv")
+    experience_level = user_data['experience_level']
+    goal = user_data['goal']
+    preferences = user_data['preferences']
+    
 if __name__ == "__main__":
     print("Welcome to PersonaFit!")
     print("This is a simple program to help you with personalized plans for your fitness goals.")
@@ -92,3 +98,5 @@ if __name__ == "__main__":
     print(f"Hello {user_data['name']}, based on your details, we will create a personalized plan for you.")
     print("User Data:", user_data)
     data_cleaning()
+    workout_recommendation(user_data)
+    
