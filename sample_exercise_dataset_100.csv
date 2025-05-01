@@ -1,0 +1,101 @@
+exercise_name,muscle_group,equipment,difficulty,goal_type,reps,sets,training_type,experience_level
+Deadlift,Core,Bodyweight,Advanced,Hypertrophy,11-19,2,Lower Body,Beginner
+Barbell Row,Full Body,Bodyweight,Beginner,Hypertrophy,12-21,5,Core,Beginner
+Mountain Climbers,Full Body,Cable,Beginner,Hypertrophy,12-21,5,Full Body,Beginner
+Box Jump,Core,Bodyweight,Advanced,Cardio,8-22,4,Full Body,Advanced
+Hammer Curl,Core,Cable,Advanced,Strength,41 sec,2,Full Body,Advanced
+Russian Twist,Core,Cable,Beginner,Hypertrophy,15-22,5,Lower Body,Intermediate
+Tricep Dip,Shoulders,Kettlebell,Beginner,Hypertrophy,9-25,2,Full Body,Intermediate
+Chest Fly,Chest,Kettlebell,Intermediate,Cardio,8-18,5,Lower Body,Beginner
+Russian Twist,Legs,Bodyweight,Beginner,Endurance,14-25,5,Lower Body,Intermediate
+Calf Raise,Core,Kettlebell,Beginner,Endurance,44 sec,5,Full Body,Intermediate
+V-Up,Core,Kettlebell,Intermediate,Endurance,14-23,3,Full Body,Intermediate
+Barbell Row,Back,Dumbbell,Beginner,Strength,15-24,5,Lower Body,Beginner
+Sit-ups,Back,Cable,Intermediate,Hypertrophy,11-18,5,Core,Beginner
+Cable Row,Core,Kettlebell,Intermediate,Cardio,14-20,3,Upper Body,Beginner
+Hammer Curl,Full Body,Kettlebell,Beginner,Hypertrophy,15-23,5,Lower Body,Intermediate
+Barbell Row,Core,Bodyweight,Advanced,Hypertrophy,15-18,3,Lower Body,Beginner
+Toe Touch,Back,Kettlebell,Advanced,Cardio,9-23,4,Core,Advanced
+V-Up,Full Body,Machine,Beginner,Strength,13-22,4,Full Body,Advanced
+Burpees,Arms,Barbell,Beginner,Cardio,13-16,4,Core,Beginner
+Squat,Shoulders,Barbell,Advanced,Hypertrophy,51 sec,4,Lower Body,Advanced
+Skater Jumps,Legs,Dumbbell,Advanced,Strength,11-18,2,Lower Body,Intermediate
+Chest Dip,Legs,Machine,Intermediate,Endurance,10-18,2,Lower Body,Beginner
+Wall Sit,Back,Kettlebell,Intermediate,Strength,13-22,3,Lower Body,Advanced
+Bicep Curl,Back,Bodyweight,Advanced,Strength,15-20,3,Upper Body,Intermediate
+Farmer's Walk,Chest,Cable,Beginner,Strength,8-18,5,Core,Beginner
+High Knees,Shoulders,Cable,Beginner,Endurance,15-20,5,Core,Beginner
+Dumbbell Snatch,Shoulders,Cable,Intermediate,Strength,53 sec,5,Upper Body,Advanced
+Cable Crossover,Arms,Bodyweight,Beginner,Strength,13-22,4,Full Body,Advanced
+Push-up,Core,Bodyweight,Beginner,Cardio,30 sec,3,Full Body,Intermediate
+Cable Crossover,Core,Dumbbell,Advanced,Strength,15-19,4,Upper Body,Beginner
+Bear Crawl,Shoulders,Bodyweight,Advanced,Strength,14-21,2,Upper Body,Advanced
+Jumping Jacks,Full Body,Kettlebell,Beginner,Endurance,41 sec,2,Lower Body,Beginner
+Overhead Press,Core,Kettlebell,Advanced,Hypertrophy,10-16,5,Upper Body,Advanced
+Bench Press,Back,Kettlebell,Intermediate,Endurance,11-20,4,Upper Body,Beginner
+Cable Crossover,Chest,Dumbbell,Beginner,Hypertrophy,15-20,4,Upper Body,Advanced
+Toe Touch,Core,Kettlebell,Beginner,Hypertrophy,15-20,3,Lower Body,Intermediate
+Seated Row,Full Body,Cable,Intermediate,Cardio,11-24,2,Core,Beginner
+Reverse Crunch,Chest,Kettlebell,Intermediate,Hypertrophy,39 sec,5,Core,Beginner
+Plank to Push-up,Legs,Kettlebell,Advanced,Hypertrophy,46 sec,3,Full Body,Beginner
+Chest Fly,Chest,Bodyweight,Intermediate,Endurance,13-23,3,Upper Body,Advanced
+Jumping Jacks,Shoulders,Dumbbell,Intermediate,Cardio,9-24,4,Upper Body,Advanced
+Dumbbell Snatch,Legs,Cable,Advanced,Cardio,12-20,3,Core,Advanced
+V-Up,Full Body,Bodyweight,Beginner,Cardio,9-22,3,Lower Body,Advanced
+Kettlebell Swing,Legs,Dumbbell,Beginner,Endurance,9-25,3,Upper Body,Advanced
+Lat Pulldown,Arms,Dumbbell,Beginner,Hypertrophy,8-22,3,Lower Body,Advanced
+Wall Sit,Legs,Machine,Beginner,Cardio,12-17,3,Lower Body,Advanced
+Burpees,Core,Cable,Beginner,Endurance,12-20,2,Upper Body,Intermediate
+Kettlebell Swing,Arms,Dumbbell,Beginner,Hypertrophy,8-22,2,Full Body,Beginner
+Chest Dip,Shoulders,Kettlebell,Intermediate,Hypertrophy,11-25,3,Core,Advanced
+Incline Press,Chest,Bodyweight,Advanced,Endurance,44 sec,5,Full Body,Beginner
+Push-up 50,Chest,Cable,Advanced,Endurance,13-21,2,Lower Body,Advanced
+Farmer's Walk 51,Arms,Dumbbell,Advanced,Endurance,52 sec,5,Core,Advanced
+Squat 52,Legs,Cable,Intermediate,Cardio,10-23,4,Full Body,Beginner
+Reverse Crunch 53,Full Body,Barbell,Beginner,Strength,9-17,4,Core,Beginner
+Reverse Crunch 54,Shoulders,Machine,Intermediate,Hypertrophy,15-25,4,Upper Body,Intermediate
+Seated Row 55,Arms,Barbell,Intermediate,Strength,12-25,5,Core,Intermediate
+Plank 56,Shoulders,Kettlebell,Advanced,Hypertrophy,35 sec,3,Lower Body,Advanced
+Hammer Curl 57,Arms,Dumbbell,Advanced,Endurance,15-21,5,Lower Body,Intermediate
+Dumbbell Snatch 58,Shoulders,Bodyweight,Intermediate,Cardio,9-23,4,Core,Beginner
+Calf Raise 59,Full Body,Barbell,Beginner,Strength,12-24,5,Upper Body,Beginner
+Overhead Press 60,Chest,Kettlebell,Beginner,Strength,11-20,3,Core,Advanced
+Face Pull 61,Legs,Kettlebell,Intermediate,Endurance,32 sec,4,Upper Body,Intermediate
+Reverse Crunch 62,Back,Cable,Beginner,Cardio,8-17,3,Lower Body,Intermediate
+Shoulder Tap 63,Shoulders,Bodyweight,Beginner,Hypertrophy,15-16,5,Full Body,Intermediate
+V-Up 64,Core,Kettlebell,Beginner,Hypertrophy,15-23,4,Core,Advanced
+Wall Sit 65,Full Body,Bodyweight,Advanced,Hypertrophy,13-19,4,Core,Advanced
+Arnold Press 66,Arms,Machine,Advanced,Endurance,13-24,2,Core,Beginner
+Kettlebell Swing 67,Back,Cable,Advanced,Cardio,10-16,4,Full Body,Advanced
+Wall Sit 68,Core,Dumbbell,Intermediate,Cardio,14-22,3,Core,Intermediate
+Shoulder Tap 69,Legs,Kettlebell,Advanced,Cardio,42 sec,2,Full Body,Intermediate
+V-Up 70,Back,Kettlebell,Intermediate,Endurance,12-21,2,Lower Body,Intermediate
+Renegade Row 71,Legs,Kettlebell,Beginner,Hypertrophy,15-21,3,Full Body,Advanced
+Cable Row 72,Full Body,Kettlebell,Advanced,Endurance,10-25,3,Core,Intermediate
+Wall Sit 73,Arms,Cable,Advanced,Endurance,10-17,5,Core,Intermediate
+Deadlift 74,Full Body,Bodyweight,Intermediate,Hypertrophy,11-17,2,Full Body,Advanced
+Russian Twist 75,Core,Dumbbell,Advanced,Hypertrophy,10-24,4,Full Body,Beginner
+Face Pull 76,Full Body,Barbell,Advanced,Cardio,8-17,3,Core,Intermediate
+Wall Sit 77,Full Body,Bodyweight,Beginner,Cardio,12-22,4,Lower Body,Intermediate
+Calf Raise 78,Legs,Dumbbell,Intermediate,Endurance,38 sec,4,Core,Advanced
+Skater Jumps 79,Full Body,Barbell,Advanced,Endurance,8-19,4,Lower Body,Advanced
+Tricep Dip 80,Full Body,Machine,Intermediate,Strength,11-23,3,Lower Body,Advanced
+V-Up 81,Arms,Machine,Advanced,Endurance,14-18,4,Lower Body,Beginner
+Renegade Row 82,Legs,Machine,Advanced,Hypertrophy,13-19,3,Core,Intermediate
+Hammer Curl 83,Shoulders,Kettlebell,Advanced,Endurance,43 sec,2,Lower Body,Advanced
+Lunges 84,Back,Machine,Beginner,Strength,49 sec,4,Upper Body,Beginner
+Leg Press 85,Core,Dumbbell,Beginner,Hypertrophy,15-17,4,Upper Body,Intermediate
+Leg Press 86,Legs,Dumbbell,Beginner,Strength,9-21,2,Upper Body,Advanced
+Pull-up 87,Shoulders,Cable,Beginner,Hypertrophy,8-23,4,Full Body,Advanced
+Toe Touch 88,Core,Machine,Intermediate,Strength,13-19,5,Core,Intermediate
+Knee Push-up 89,Core,Cable,Advanced,Hypertrophy,57 sec,3,Core,Beginner
+Renegade Row 90,Core,Kettlebell,Beginner,Hypertrophy,38 sec,5,Full Body,Advanced
+Toe Touch 91,Core,Machine,Advanced,Strength,12-25,5,Upper Body,Intermediate
+Tuck Jump 92,Back,Barbell,Intermediate,Hypertrophy,44 sec,3,Upper Body,Beginner
+Pull-up 93,Back,Kettlebell,Intermediate,Cardio,46 sec,5,Full Body,Advanced
+Renegade Row 94,Chest,Cable,Intermediate,Strength,9-24,3,Lower Body,Intermediate
+Barbell Row 95,Back,Cable,Advanced,Hypertrophy,12-16,4,Lower Body,Intermediate
+Bicep Curl 96,Arms,Dumbbell,Advanced,Hypertrophy,12-20,4,Lower Body,Beginner
+Mountain Climbers 97,Arms,Kettlebell,Beginner,Strength,14-24,3,Lower Body,Beginner
+Leg Curl 98,Shoulders,Bodyweight,Beginner,Hypertrophy,9-25,5,Full Body,Beginner
+High Knees 99,Core,Barbell,Beginner,Strength,15-17,3,Lower Body,Advanced
