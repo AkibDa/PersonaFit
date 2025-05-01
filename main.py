@@ -10,7 +10,13 @@ def get_user_data():
         age = int(input("Age: "))
         weight = float(input("Weight (kg): "))
         height = float(input("Height (cm): "))
-        goal = input("Fitness Goal (e.g., weight loss, muscle gain, maintenance): ")
+        goal = input("Fitness Goal (e.g., strength, hypertrophy, cardio, endurance): ").capitalize()
+        experience_level = input("Experience Level (Beginner, Intermediate, Advanced): ").capitalize()
+        if experience_level not in ["Beginner", "Intermediate", "Advanced"]:
+            raise ValueError("Experience level must be either Beginner, Intermediate, or Advanced.")
+        valid_goals = ["Strength", "Hypertrophy", "Cardio", "Endurance"]
+        if goal not in valid_goals:
+            raise ValueError(f"Goal must be one of {valid_goals}.")
         pref = input("Preferences (Home or Gym, available equipment): ")
         print("Thank you for providing your details!")
         
@@ -35,7 +41,8 @@ def get_user_data():
         "weight": weight,
         "height": height,
         "goal": goal,
-        "preferences": pref
+        "preferences": pref,
+        "experience_level": experience_level,
     }
     
 def data_cleaning():
@@ -86,11 +93,38 @@ def data_cleaning():
     print("Dataset cleaned and saved as 'cleaned_exercise_dataset.csv'")
     
 def workout_recommendation(user_data):
+    # Load cleaned dataset
     df = pd.read_csv("cleaned_exercise_dataset.csv")
-    experience_level = user_data['experience_level']
-    goal = user_data['goal']
-    preferences = user_data['preferences']
-    
+
+    # Load encoders (retrain them for mapping, ideally persist in real app)
+    le_experience = LabelEncoder().fit(["beginner", "intermediate", "advanced"])
+    le_goal = LabelEncoder().fit(["strength", "hypertrophy", "endurance", "cardio"])
+
+    # Encode user inputs
+    user_exp_encoded = le_experience.transform([user_data['experience_level'].lower()])[0]
+    user_goal_encoded = le_goal.transform([user_data['goal'].lower()])[0]
+
+    # Filter dataset based on experience level and goal
+    filtered_df = df[
+        (df["experience_level"] == user_exp_encoded) &
+        (df["goal_type"] == user_goal_encoded)
+    ]
+
+    # Optional: filter based on preferences (muscle group or training type keywords)
+    if user_data.get("preferences"):
+        pref_filtered = []
+        for pref in user_data["preferences"]:
+            filtered = filtered_df[
+                df["muscle_group"].astype(str).str.contains(pref.lower()) |
+                df["training_type"].astype(str).str.contains(pref.lower())
+            ]
+            pref_filtered.append(filtered)
+        if pref_filtered:
+            filtered_df = pd.concat(pref_filtered).drop_duplicates()
+
+    # Return top 5 recommendations
+    return filtered_df.sample(min(5, len(filtered_df))).to_dict(orient="records")
+     
 if __name__ == "__main__":
     print("Welcome to PersonaFit!")
     print("This is a simple program to help you with personalized plans for your fitness goals.")
