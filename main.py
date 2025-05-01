@@ -6,34 +6,37 @@ def get_user_data():
         print("Note: Age should be a number, Weight in kg, Height in cm.")
         name = input("Name: ")
         age = int(input("Age: "))
-        if age<0 or age>100:
-            print("Why need a workout plan?\nTake some rest.")
+        if age < 0 or age > 100:
+            print("Age must be between 0 and 100.")
             return None
         weight = float(input("Weight (kg): "))
-        height = float(input("Height (cm): "))
-        if weight<0 or weight>100 or height<0 or height>1000:
-            print("Why need a workout plan?\nTake some rest.")
+        if weight < 0 or weight > 300:
+            print("Weight must be between 0 and 300 kg.")
             return None
+        height = float(input("Height (cm): "))
+        if height < 0 or height > 300:
+            print("Height must be between 0 and 300 cm.")
+            return None
+
+        valid_muscles = ['waist', 'upper legs', 'lower legs', 'chest',
+                         'back', 'upper arms', 'cardio', 'shoulders', 'lower arms']
+        print(f"Available muscle groups: {', '.join(valid_muscles)}")
         muscle = input("What muscle do you want to hit today? : ").lower()
-        if muscle not in ['waist', 'upper legs', 'lower legs', 'chest', 'back', 'upper arms', 'cardio', 'shoulders', 'lower arms']:
-            raise ValueError("Mention Proper Muscle!")
+        if muscle not in valid_muscles:
+            raise ValueError(f"Please choose from these muscles: {', '.join(valid_muscles)}")
+
         print("Thank you for providing your details!")
-        
+
     except KeyboardInterrupt:
         print("\nInput interrupted. Exiting...")
         return None
-    
-    except TypeError:
-        print("Invalid input. Please enter valid data types.")
-        return None
-    
-    except ValueError:
-        print("Invalid input. Please enter numeric values for age, weight, and height.")
+    except ValueError as e:
+        print(f"Invalid input: {e}")
         return None
     except Exception as e:
-        print(f"An error occurred: {e}")
+        print(f"An unexpected error occurred: {e}")
         return None
-    
+
     return {
         "name": name,
         "age": age,
@@ -42,17 +45,34 @@ def get_user_data():
         "muscle": muscle,
     }
 
-def get_workout_plan( muscle):
-    db = pd.read_csv('exercises.csv')
-    print('Your workout plan for', muscle)
-    print(db[(db['bodyPart'] == muscle)]['name'],['instructions/0'])
+
+def get_workout_plan(muscle):
+    try:
+        db = pd.read_csv('exercises.csv')
+        exercises = db[db['bodyPart'] == muscle][['name', 'instructions/0']]
+
+        if exercises.empty:
+            print(f"No exercises found for {muscle}.")
+            return
+
+        print(f"\nYour workout plan for {muscle}:")
+        for idx, row in exercises.iterrows():
+            print(f"\nExercise: {row['name']}")
+            print(f"Instructions: {row['instructions/0']}")
+
+    except FileNotFoundError:
+        print("Error: exercises.csv file not found.")
+    except Exception as e:
+        print(f"An error occurred while generating workout plan: {e}")
+
 
 if __name__ == "__main__":
     print("Welcome to PersonaFit!")
     print("This is a simple program to help you with personalized plans for your fitness goals.")
+
     user_data = get_user_data()
-    print(f"Hello {user_data['name']}, based on your details, we will create a personalized plan for you.")
-    print("User Data:", user_data)
-    get_workout_plan(user_data['muscle'])
-    print("Thank you for using PersonaFit! Have a great day!")
-    
+    if user_data:
+        print(f"\nHello {user_data['name']}, based on your details, we will create a personalized plan for you.")
+        get_workout_plan(user_data['muscle'])
+
+    print("\nThank you for using PersonaFit! Have a great day!")
