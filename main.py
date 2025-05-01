@@ -6,11 +6,19 @@ def get_user_data():
         print("Note: Age should be a number, Weight in kg, Height in cm.")
         name = input("Name: ")
         age = int(input("Age: "))
+        if age<0 or age>100:
+            print("Why need a workout plan?\nTake some rest.")
+            return None
         weight = float(input("Weight (kg): "))
         height = float(input("Height (cm): "))
+        if weight<0 or weight>100 or height<0 or height>100:
+            print("Why need a workout plan?\nTake some rest.")
         experience_level = input("Experience Level (Beginner, Intermediate, Advanced): ").capitalize()
         if experience_level not in ["Beginner", "Intermediate", "Advanced"]:
             raise ValueError("Experience level must be either Beginner, Intermediate, or Advanced.")
+        muscle = input("What muscle do you want to hit today? : ").capitalize()
+        if muscle not in ['Core', 'Full Body', 'Shoulders', 'Chest', 'Back', 'Arms', 'Legs']:
+            raise ValueError("Mention Proper Muscle!")
         print("Thank you for providing your details!")
         
     except KeyboardInterrupt:
@@ -34,12 +42,14 @@ def get_user_data():
         "weight": weight,
         "height": height,
         "experience_level": experience_level,
+        "muscle": muscle,
     }
 
-def get_workout_plan(experience_level):
-    df = pd.read_csv('sample_exercise_dataset_100.csv')
+def get_workout_plan(experience_level, muscle):
+    db = pd.read_csv('sample_exercise_dataset_100.csv')
     print(f"\n{experience_level} workout plan:")
-    print(df[df["experience_level"] == experience_level]["exercise_name"])
+
+    print(db[(db['experience_level'] == experience_level) & (db['muscle_group'] == muscle)]['exercise_name'])
 
 if __name__ == "__main__":
     print("Welcome to PersonaFit!")
@@ -47,6 +57,6 @@ if __name__ == "__main__":
     user_data = get_user_data()
     print(f"Hello {user_data['name']}, based on your details, we will create a personalized plan for you.")
     print("User Data:", user_data)
-    get_workout_plan(user_data["experience_level"])
+    get_workout_plan(user_data["experience_level"],user_data['muscle'])
     print("Thank you for using PersonaFit! Have a great day!")
     
