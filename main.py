@@ -11,8 +11,9 @@ def get_user_data():
             return None
         weight = float(input("Weight (kg): "))
         height = float(input("Height (cm): "))
-        if weight<0 or weight>100 or height<0 or height>100:
+        if weight<0 or weight>100 or height<0 or height>1000:
             print("Why need a workout plan?\nTake some rest.")
+            return None
         experience_level = input("Experience Level (Beginner, Intermediate, Advanced): ").capitalize()
         if experience_level not in ["Beginner", "Intermediate", "Advanced"]:
             raise ValueError("Experience level must be either Beginner, Intermediate, or Advanced.")
