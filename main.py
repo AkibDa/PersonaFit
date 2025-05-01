@@ -41,8 +41,11 @@ def get_user_data():
         valid_goals = ["Strength", "Hypertrophy", "Cardio", "Endurance"]
         if goal not in valid_goals:
             raise ValueError(f"Goal must be one of {valid_goals}.")
-        training_type = input("Training Type (e.g., strength, cardio, flexibility): ").capitalize()
+        training_type = input("Training Type (e.g., upper body, core, full body): ").capitalize()
         muscle_group = input("Preferred Muscle Group (e.g., legs, arms, back, chest): ").capitalize()
+        equipment = input("Preferred Equipment (e.g., dumbbells, barbell, bodyweight): ").capitalize()
+        if equipment not in ["Dumbbells", "Barbell", "Bodyweight"]:
+            raise ValueError("Equipment must be either Dumbbells, Barbell, or Bodyweight.")
         print("Thank you for providing your details!")
         
     except KeyboardInterrupt:
@@ -69,6 +72,7 @@ def get_user_data():
         "training_type": training_type,
         "muscle_group": muscle_group,
         "experience_level": experience_level,
+        "equipment": equipment,
     }
     
 def data_cleaning():
@@ -128,7 +132,6 @@ def recommend_workouts_ml(user_input):
     le_dict = {
         "muscle_group": LabelEncoder().fit(df["muscle_group"]),
         "equipment": LabelEncoder().fit(df["equipment"]),
-        "difficulty": LabelEncoder().fit(df["experience_level"]),
         "goal_type": LabelEncoder().fit(df["goal_type"]),
         "training_type": LabelEncoder().fit(df["training_type"]),
         "experience_level": LabelEncoder().fit(df["experience_level"]),
@@ -138,7 +141,6 @@ def recommend_workouts_ml(user_input):
     user_vector = [
         le_dict["muscle_group"].transform([user_input["muscle_group"]])[0],
         le_dict["equipment"].transform([user_input["equipment"]])[0],
-        le_dict["difficulty"].transform([user_input["difficulty"]])[0],
         le_dict["goal_type"].transform([user_input["goal"]])[0],
         le_dict["training_type"].transform([user_input["training_type"]])[0],
         le_dict["experience_level"].transform([user_input["experience_level"]])[0],
@@ -151,7 +153,7 @@ def recommend_workouts_ml(user_input):
 
     # Get recommendations
     indices = knn_model.kneighbors(user_vector_scaled, return_distance=False)[0]
-    return df.iloc[indices][["exercise_name", "reps", "sets", "difficulty", "muscle_group"]].to_dict(orient="records")    
+    return df.iloc[indices][["exercise_name", "reps", "sets", "muscle_group"]].to_dict(orient="records")    
     
 def workout_recommendation(user_data):
     # Load cleaned dataset
