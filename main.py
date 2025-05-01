@@ -14,11 +14,8 @@ def get_user_data():
         if weight<0 or weight>100 or height<0 or height>1000:
             print("Why need a workout plan?\nTake some rest.")
             return None
-        experience_level = input("Experience Level (Beginner, Intermediate, Advanced): ").capitalize()
-        if experience_level not in ["Beginner", "Intermediate", "Advanced"]:
-            raise ValueError("Experience level must be either Beginner, Intermediate, or Advanced.")
-        muscle = input("What muscle do you want to hit today? : ").capitalize()
-        if muscle not in ['Core', 'Full Body', 'Shoulders', 'Chest', 'Back', 'Arms', 'Legs']:
+        muscle = input("What muscle do you want to hit today? : ").lower()
+        if muscle not in ['waist', 'upper legs', 'lower legs', 'chest', 'back', 'upper arms', 'cardio', 'shoulders', 'lower arms']:
             raise ValueError("Mention Proper Muscle!")
         print("Thank you for providing your details!")
         
@@ -42,15 +39,13 @@ def get_user_data():
         "age": age,
         "weight": weight,
         "height": height,
-        "experience_level": experience_level,
         "muscle": muscle,
     }
 
-def get_workout_plan(experience_level, muscle):
-    db = pd.read_csv('sample_exercise_dataset_100.csv')
-    print(f"\n{experience_level} workout plan:")
-
-    print(db[(db['experience_level'] == experience_level) & (db['muscle_group'] == muscle)]['exercise_name'])
+def get_workout_plan( muscle):
+    db = pd.read_csv('exercises.csv')
+    print('Your workout plan for', muscle)
+    print(db[(db['bodyPart'] == muscle)]['name'],['instructions/0'])
 
 if __name__ == "__main__":
     print("Welcome to PersonaFit!")
@@ -58,6 +53,6 @@ if __name__ == "__main__":
     user_data = get_user_data()
     print(f"Hello {user_data['name']}, based on your details, we will create a personalized plan for you.")
     print("User Data:", user_data)
-    get_workout_plan(user_data["experience_level"],user_data['muscle'])
+    get_workout_plan(user_data['muscle'])
     print("Thank you for using PersonaFit! Have a great day!")
     
